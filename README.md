@@ -92,18 +92,6 @@ pkg install -y rust binutils
 CARGO_BUILD_TARGET="$(rustc -Vv | grep "host" | awk '{print $2}')" pip install maturin
 ```
 
-## Git Clone This Script
+## Clone This Script and do the rest.
 
-Clone the repository using:
 
-```bash
-git clone https://github.com/ashtrobe/grasswoex.git
-```
-
-### Change Directory to Script Folder
-
-Navigate to the script folder:
-
-```bash
-cd grasswoex
-```
