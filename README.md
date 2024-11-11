@@ -1,3 +1,6 @@
+## Paste your proxies inside local_proxies.txt
+
+
 # How to Get GRASS User ID
 
 1. Open your browser and login to the GRASS dashboard.
