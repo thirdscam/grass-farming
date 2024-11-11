@@ -9,6 +9,7 @@
    ```
 
 4. You will receive your user ID, which looks like this: `"2oT4xCkPYSNyBp........"`
+5. If you can't paste, type allow pasting and press Enter, then paste the line above.
 
 ## Recommended Python Version
 
@@ -53,4 +54,56 @@ or
 
 ```bash
 python grassnodeproxy.py
+```
+
+## FOR ANDROID
+
+# How to Get GRASS User ID Using Android Device
+
+1. Download and install [Kiwi Browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser&hl=en).
+2. Login to the GRASS web and go to the dashboard.
+3. Open the **Developer Tools** in the Kiwi browser.
+4. Go to the **Console** tab and paste this code:
+
+   ```javascript
+   localStorage.getItem('userId')
+   ```
+
+5. If you can't paste, type `allow pasting` and press Enter, then paste the line above.
+
+## Configure Termux
+
+After installing Termux, ensure you have allowed storage permission for Termux (device app) settings.  
+Alternatively, run this command in Termux:
+
+```bash
+termux-setup-storage
+```
+
+### Install Python 3.10
+
+Run the following commands:
+
+```bash
+pkg update && upgrade
+pkg install tur-repo
+pkg install python-is-python3.10
+pkg install -y rust binutils
+CARGO_BUILD_TARGET="$(rustc -Vv | grep "host" | awk '{print $2}')" pip install maturin
+```
+
+## Git Clone This Script
+
+Clone the repository using:
+
+```bash
+git clone https://github.com/ashtrobe/grasswoex.git
+```
+
+### Change Directory to Script Folder
+
+Navigate to the script folder:
+
+```bash
+cd grasswoex
 ```
