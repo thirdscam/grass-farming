@@ -1,22 +1,56 @@
-# **HOW TO GET GRASS USER ID** 
-Go to your broswer and login to GRASS dashboard. Press F12 and open inspect elements. Paste this in the console -
-> localStorage.getItem('userId')
+# How to Get GRASS User ID
 
-In return you will get your id that looks something like this "2oT4xCkPYSNyBp........"
+1. Open your browser and login to the GRASS dashboard.
+2. Press `F12` to open the **Inspect Elements** panel.
+3. Go to the **Console** tab and paste the following code:
 
-# It is recommeneded to use Python 3.10 
-Download it from here - https://www.python.org/downloads/release/python-3100/
+   ```javascript
+   localStorage.getItem('userId')
+   ```
 
-**Install requirements**
-> pip install -r requirements.txt
+4. You will receive your user ID, which looks like this: `"2oT4xCkPYSNyBp........"`
 
-*Run the script using
-> python grassdesktop_freeproxy.py (**it will automatically assign free proxies using proxyscrape API)
+## Recommended Python Version
 
-or if you wanna use the node version
+It is recommended to use **Python 3.10**.  
+[Download Python 3.10 here](https://www.python.org/downloads/release/python-3100/).
 
-> python grassnode_autoproxy.py
+## Install Requirements
 
-If you have personal proxies -
-> python grassdesktopproxy.py
-> python grassnodeproxy.py
+Run the following command to install the necessary packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Running the Script
+
+You can run the script using the following commands:
+
+### Using Free Proxies (Automatically Assigned)
+
+```bash
+python grassdesktop_freeproxy.py
+```
+
+This script will automatically assign free proxies using the **Proxyscrape API**.
+
+### Using the Node Version
+
+```bash
+python grassnode_freeproxy.py
+```
+
+### Using Personal Proxies
+
+If you have your own proxies, use:
+
+```bash
+python grassdesktopproxy.py
+```
+
+or
+
+```bash
+python grassnodeproxy.py
+```
