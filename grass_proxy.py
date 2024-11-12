@@ -4,8 +4,6 @@ import ssl
 import json
 import time
 import uuid
-import requests
-import shutil
 from loguru import logger
 from websockets_proxy import Proxy, proxy_connect
 from fake_useragent import UserAgent
@@ -14,7 +12,8 @@ async def connect_to_wss(socks5_proxy, user_id):
     user_agent = UserAgent(os=['windows', 'macos', 'linux'], browsers='chrome')
     random_user_agent = user_agent.random
     device_id = str(uuid.uuid3(uuid.NAMESPACE_DNS, socks5_proxy))
-    logger.info(device_id)
+    logger.info(f"Device ID: {device_id}")
+
     while True:
         try:
             await asyncio.sleep(random.randint(1, 10) / 10)
@@ -24,10 +23,12 @@ async def connect_to_wss(socks5_proxy, user_id):
             ssl_context = ssl.create_default_context()
             ssl_context.check_hostname = False
             ssl_context.verify_mode = ssl.CERT_NONE
+
             urilist = ["wss://proxy.wynd.network:4444/", "wss://proxy.wynd.network:4650/"]
             uri = random.choice(urilist)
             server_hostname = "proxy.wynd.network"
             proxy = Proxy.from_url(socks5_proxy)
+
             async with proxy_connect(uri, proxy=proxy, ssl=ssl_context, server_hostname=server_hostname,
                                      extra_headers=custom_headers) as websocket:
                 async def send_ping():
@@ -35,7 +36,7 @@ async def connect_to_wss(socks5_proxy, user_id):
                         send_message = json.dumps({
                             "id": str(uuid.uuid4()), "version": "1.0.0", "action": "PING", "data": {}
                         })
-                        logger.debug(send_message)
+                        logger.debug(f"Sending ping: {send_message}")
                         await websocket.send(send_message)
                         await asyncio.sleep(5)
 
@@ -45,7 +46,8 @@ async def connect_to_wss(socks5_proxy, user_id):
                 while True:
                     response = await websocket.recv()
                     message = json.loads(response)
-                    logger.info(message)
+                    logger.info(f"Received message: {message}")
+
                     if message.get("action") == "AUTH":
                         auth_response = {
                             "id": message["id"],
@@ -59,21 +61,15 @@ async def connect_to_wss(socks5_proxy, user_id):
                                 "version": "4.28.2",
                             }
                         }
-                        logger.debug(auth_response)
+                        logger.debug(f"Sending auth response: {auth_response}")
                         await websocket.send(json.dumps(auth_response))
 
                     elif message.get("action") == "PONG":
                         pong_response = {"id": message["id"], "origin_action": "PONG"}
-                        logger.debug(pong_response)
+                        logger.debug(f"Sending pong response: {pong_response}")
                         await websocket.send(json.dumps(pong_response))
         except Exception as e:
-            proxy_to_remove = socks5_proxy
-            with open('local_proxies.txt', 'r') as file:
-                lines = file.readlines()
-            updated_lines = [line for line in lines if line.strip() != proxy_to_remove]
-            with open('local_proxies.txt', 'w') as file:
-                file.writelines(updated_lines)
-            print(f"Proxy '{proxy_to_remove}' has been removed from the file.")
+            logger.error(f"Error with proxy {socks5_proxy}: {e}")
 
 async def main():
     try:
@@ -98,7 +94,7 @@ async def main():
         print("Error: 'local_proxies.txt' file not found.")
         return
 
-    tasks = [asyncio.ensure_future(connect_to_wss(i, _user_id)) for i in local_proxies]
+    tasks = [asyncio.ensure_future(connect_to_wss(proxy, _user_id)) for proxy in local_proxies]
     await asyncio.gather(*tasks)
 
 if __name__ == '__main__':
