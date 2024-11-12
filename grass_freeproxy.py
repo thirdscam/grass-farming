@@ -75,22 +75,55 @@ async def connect_to_wss(socks5_proxy, user_id):
                 file.writelines(updated_lines)
             print(f"Proxy '{proxy_to_remove}' has been removed from the file.")
 
+def fetch_proxies():
+    """Fetches proxies from the API and saves them to 'auto_proxies.txt'."""
+    api_url = "https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&proxy_format=protocolipport&format=text"
+    try:
+        response = requests.get(api_url, stream=True)
+        if response.status_code == 200:
+            proxies = response.text.strip().splitlines()
+            if proxies:
+                with open('auto_proxies.txt', 'w') as f:
+                    f.writelines([proxy + '\n' for proxy in proxies])
+                print(f"Fetched and saved {len(proxies)} proxies to 'auto_proxies.txt'.")
+            else:
+                print("No proxies found from the API.")
+                return False
+        else:
+            print(f"Failed to fetch proxies. Status code: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"Error fetching proxies: {e}")
+        return False
+    return True
+
 async def main():
     try:
         with open('user_id.txt', 'r') as f:
             _user_id = f.read().strip()
+        if not _user_id:
+            print("No user ID found in 'user_id.txt'.")
+            return
         print(f"User ID read from file: {_user_id}")
     except FileNotFoundError:
         print("Error: 'user_id.txt' file not found.")
         return
 
-    r = requests.get("https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&proxy_format=protocolipport&format=text", stream=True)
-    if r.status_code == 200:
-        with open('auto_proxies.txt', 'wb') as f:
-            for chunk in r:
-                f.write(chunk)
+    # Fetch and save proxies to 'auto_proxies.txt'
+    if not fetch_proxies():
+        print("No proxies available. Exiting script.")
+        return
+
+    try:
         with open('auto_proxies.txt', 'r') as file:
             auto_proxy_list = file.read().splitlines()
+            if not auto_proxy_list:
+                print("No proxies found in 'auto_proxies.txt'. Exiting script.")
+                return
+            print(f"Proxies read from file: {auto_proxy_list}")
+    except FileNotFoundError:
+        print("Error: 'auto_proxies.txt' file not found.")
+        return
 
     tasks = [asyncio.ensure_future(connect_to_wss(i, _user_id)) for i in auto_proxy_list]
     await asyncio.gather(*tasks)
