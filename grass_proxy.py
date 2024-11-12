@@ -79,13 +79,24 @@ async def main():
     try:
         with open('user_id.txt', 'r') as f:
             _user_id = f.read().strip()
+        if not _user_id:
+            print("No user ID found in 'user_id.txt'.")
+            return
         print(f"User ID read from file: {_user_id}")
     except FileNotFoundError:
         print("Error: 'user_id.txt' file not found.")
         return
 
-    with open('local_proxies.txt', 'r') as file:
-        local_proxies = file.read().splitlines()
+    try:
+        with open('local_proxies.txt', 'r') as file:
+            local_proxies = file.read().splitlines()
+            if not local_proxies:
+                print("No proxies found in 'local_proxies.txt'.")
+                return
+            print(f"Proxies read from file: {local_proxies}")
+    except FileNotFoundError:
+        print("Error: 'local_proxies.txt' file not found.")
+        return
 
     tasks = [asyncio.ensure_future(connect_to_wss(i, _user_id)) for i in local_proxies]
     await asyncio.gather(*tasks)
