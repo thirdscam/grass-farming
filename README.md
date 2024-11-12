@@ -1,4 +1,4 @@
-## Paste your proxies inside local_proxies.txt
+## Paste your proxies inside local_proxies.txt and the User ID inside user_id.txt
 
 
 # How to Get GRASS User ID
