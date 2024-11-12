@@ -50,13 +50,13 @@ python grassnode_freeproxy.py
 If you have your own proxies, use:
 
 ```bash
-python grassdesktopproxy.py
+python grass_proxy.py
 ```
 
 or
 
 ```bash
-python grassnodeproxy.py
+python grass_freeproxy.py
 ```
 
 ## FOR ANDROID
