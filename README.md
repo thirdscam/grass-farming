@@ -32,33 +32,14 @@ pip install -r requirements.txt
 You can run the script using the following commands:
 
 ### Using Free Proxies (Automatically Assigned)
-
-```bash
-python grassdesktop_freeproxy.py
-```
-
-This script will automatically assign free proxies using the **Proxyscrape API**.
-
-### Using the Node Version
-
-```bash
-python grassnode_freeproxy.py
-```
-
-### Using Personal Proxies
-
-If you have your own proxies, use:
-
-```bash
-python grass_proxy.py
-```
-
-or
-
 ```bash
 python grass_freeproxy.py
 ```
-
+This script will automatically assign free proxies using the **Proxyscrape API**.
+### Using Personal Proxies
+```bash
+python grass_proxy.py
+```
 ## FOR ANDROID
 
 # How to Get GRASS User ID Using Android Device
