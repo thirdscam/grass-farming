@@ -1,0 +1,13 @@
+services:
+  grass-farming:
+    container_name: "grass-miner"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./user_id.txt:/app/grass-farming/user_id.txt
+      - ./local_proxies.txt:/app/grass-farming/local_proxies.txt
+    ulimits:
+      nofile:
+        soft: 4096
+        hard: 4096
