@@ -1,5 +1,9 @@
 ## Paste your proxies inside local_proxies.txt and the User ID inside user_id.txt
 
+# Dockerization
+
+This repository supports dockerization.
+You can run it by filling in `user_id.txt` and `local_proxies.txt` (optional) and then type `docker compose up -d`.
 
 # How to Get GRASS User ID
 
